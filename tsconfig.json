@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "ES6",
+        "target": "ES5",
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "outDir": "./dist/"
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+}
