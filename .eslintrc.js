@@ -18,5 +18,7 @@ module.exports = {
         '@typescript-eslint/indent': ['error', 4],
         'no-underscore-dangle': 'off',
         'max-len': 'off',
+        'no-param-reassign': 'off',
+        'prefer-destructuring': 'off',
     }
 }
