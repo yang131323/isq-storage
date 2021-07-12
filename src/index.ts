@@ -32,11 +32,11 @@ export class WebStorage {
      * webStorage封装配置初始化
      * @param {StorageConfig} config - Storage配置
      */
-    constructor(config: StorageConfig) {
-        const tempConfig = { ...config };
-        tempConfig.prefix = config.prefix ?? '__storage_';
-        tempConfig.type = config.type ?? StorageType.Session;
-        tempConfig.expire = config.expire ?? 0;
+    constructor(config?: StorageConfig) {
+        const tempConfig = config || {};
+        tempConfig.prefix = tempConfig.prefix ?? '__storage_';
+        tempConfig.type = tempConfig.type ?? StorageType.Session;
+        tempConfig.expire = tempConfig.expire ?? 0;
         this.config = tempConfig;
         this.prefix = tempConfig.prefix;
         this.expire = tempConfig.expire;
@@ -147,10 +147,4 @@ export class WebStorage {
     }
 }
 
-export const LocalStorage = new WebStorage({
-    type: StorageType.Local,
-});
-
-export const SessionStorage = new WebStorage({
-    type: StorageType.Session,
-});
+export const LocalStorage = new WebStorage();

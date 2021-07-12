@@ -1,19 +1,8 @@
-const path = require('path');
+const { merge } = require('webpack-merge');
+const baseConfig = require('./webpack.base.js');
 
-module.exports = {
-    entry: './src/index.ts',
-    output: {
-        path: path.join(__dirname, './dist'),
-        filename: '[name].bundle.js'
-    },
-    module: {
-        rules: [
-            {
-                test: /\.ts$/,
-                use: 'ts-loader',
-                exclude: 'node_modules',
-            }
-        ]
-    },
-    
+const prodConfig = {
+    mode: 'production'
 }
+
+module.exports = merge(baseConfig, prodConfig);
