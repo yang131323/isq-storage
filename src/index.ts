@@ -12,12 +12,13 @@ interface StorageValue {
 
 interface StorageOptions {
     type?: StorageType,
-    expire?: string | number,
+    expire?: string | number | Date,
 }
 interface StorageConfig extends StorageOptions {
     prefix?: string,
 }
 
+/** 浏览器web存储对象封装 */
 export class WebStorage {
     private config: StorageConfig;
 
@@ -27,11 +28,6 @@ export class WebStorage {
 
     private expire: string | number | Date;
 
-    /**
-     * @constructor WebStorage
-     * webStorage封装配置初始化
-     * @param {StorageConfig} config - Storage配置
-     */
     constructor(config?: StorageConfig) {
         const tempConfig = config || {};
         tempConfig.prefix = tempConfig.prefix ?? '__storage_';
@@ -43,12 +39,14 @@ export class WebStorage {
         this.storage = tempConfig.type === StorageType.Local ? window.localStorage : window.sessionStorage;
     }
 
+    /** 异步设置数据到web缓存 */
     setItem(key: string, value: any, opts?: StorageOptions) {
         return new Promise((resolve) => {
             resolve(this.setItemSync(key, value, opts));
         });
     }
 
+    /** 同步设置数据到web缓存 */
     setItemSync(key: string, value: any, opts?: StorageOptions) {
         if (!key || !value) throw Error('need "key" and "value" arguments');
         try {
@@ -68,12 +66,14 @@ export class WebStorage {
         }
     }
 
+    /** 异步从web缓存获取数据 */
     getItem(key: string, defVal?: any, opts?: StorageOptions) {
         return new Promise((resolve) => {
             resolve(this.getItemSync(key, defVal, opts));
         });
     }
 
+    /** 同步从web缓存获取数据 */
     getItemSync(key: string, defVal?: any, opts?: StorageOptions) {
         if (!key) throw Error('need "key" argument');
         defVal = defVal || null;
@@ -84,13 +84,13 @@ export class WebStorage {
             const v = storage.getItem(realKey) || '';
             const val = <StorageValue>JSON.parse(v);
             let result;
-            if (val.exp && val.exp <= now) {
+            if (val.exp && val.exp > now) {
+                result = val.v ?? defVal;
+            } else {
                 result = defVal;
                 setTimeout(() => {
                     this.removeItem(key);
                 });
-            } else {
-                result = val.v;
             }
             return result;
         } catch (e) {
@@ -100,12 +100,14 @@ export class WebStorage {
         }
     }
 
+    /** 异步从web缓存删除数据 */
     removeItem(key: string) {
         return new Promise((resolve) => {
             resolve(this.removeItemSync(key));
         });
     }
 
+    /** 同步从web缓存删除数据 */
     removeItemSync(key: string, opts?: StorageOptions) {
         if (!key) throw Error('need "key" argument');
         const realKey = `${this.prefix}${key}`;
@@ -120,12 +122,14 @@ export class WebStorage {
         }
     }
 
+    /** 异步清除web缓存所有数据 */
     clear(opts?: StorageOptions) {
         return new Promise((resolve) => {
             resolve(this.clearSync(opts));
         });
     }
 
+    /** 同步清除web缓存所有数据 */
     clearSync(opts?: StorageOptions) {
         const storage = this.getStorage(opts);
         try {
@@ -147,4 +151,4 @@ export class WebStorage {
     }
 }
 
-export const LocalStorage = new WebStorage();
+export const Storage = new WebStorage();

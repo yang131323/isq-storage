@@ -4,3 +4,4 @@ node_modules/
 storageTest/
 dist/
 webpack.*.js
+README.md
