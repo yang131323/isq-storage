@@ -1,6 +1,6 @@
 {
   "name": "@isq/storage",
-  "version": "1.0.0",
+  "version": "1.0.1-0",
   "description": "封装sessionStorage和localStorage操作",
   "main": "./dist/main.bundle.js",
   "scripts": {
