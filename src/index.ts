@@ -76,7 +76,7 @@ export class WebStorage {
     /** 同步从web缓存获取数据 */
     getItemSync(key: string, defVal?: any, opts?: StorageOptions) {
         if (!key) throw Error('need "key" argument');
-        defVal = defVal || null;
+        defVal = defVal ?? null;
         const realKey = `${this.prefix}${key}`;
         try {
             const storage = this.getStorage(opts);
@@ -84,13 +84,14 @@ export class WebStorage {
             const v = storage.getItem(realKey) || '';
             const val = <StorageValue>JSON.parse(v);
             let result;
-            if (val.exp && val.exp > now) {
-                result = val.v ?? defVal;
-            } else {
+            // exp不存在说明没有设置过期时间、只有存在且少于当前时间才是真正过期
+            if (val.exp && val.exp <= now) {
                 result = defVal;
                 setTimeout(() => {
                     this.removeItem(key);
                 });
+            } else {
+                result = val.v ?? defVal;
             }
             return result;
         } catch (e) {

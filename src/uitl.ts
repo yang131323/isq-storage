@@ -17,19 +17,23 @@ export default class TimeFormat {
     static formatTime(time: number | string | Date): number {
         let result;
         const timeReg = /(\d+)([dhms]{1,1})/i;
-        if (typeof time === 'string' && timeReg.test(time)) {
-            const now = Date.now();
-            const originTime = time.trim().toLowerCase();
-            const match = originTime.match(timeReg);
-            const timeUnit = TimeFormat.getUnitTime(<TimeUnit>(match && match[2]));
-            const num = Number((match && match[1]) || 1);
-            result = now + (timeUnit * num);
-        } else if (typeof time === 'string') {
-            result = new Date(time).getTime();
-        } else if (typeof time === 'number') {
-            result = time;
-        } else {
-            result = time.getTime();
+        try {
+            if (typeof time === 'string' && timeReg.test(time)) {
+                const now = Date.now();
+                const originTime = time.trim().toLowerCase();
+                const match = originTime.match(timeReg);
+                const timeUnit = TimeFormat.getUnitTime(<TimeUnit>(match && match[2]));
+                const num = Number((match && match[1]) || 1);
+                result = now + (timeUnit * num);
+            } else if (typeof time === 'string') {
+                result = new Date(time).getTime();
+            } else if (typeof time === 'number') {
+                result = time;
+            } else {
+                result = time.getTime();
+            }
+        } catch (err) {
+            throw new Error(`'setItem' or 'setItemSync' expire argument has error, expire: ${time}`);
         }
         return result;
     }
