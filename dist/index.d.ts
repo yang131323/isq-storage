@@ -4,7 +4,7 @@ declare enum StorageType {
 }
 interface StorageOptions {
     type?: StorageType;
-    expire?: string | number;
+    expire?: string | number | Date;
 }
 interface StorageConfig extends StorageOptions {
     prefix?: string;
@@ -25,5 +25,5 @@ export declare class WebStorage {
     clearSync(opts?: StorageOptions): boolean;
     getStorage(opts: StorageOptions | undefined): Storage;
 }
-export declare const SessionStorage: WebStorage;
+export declare const Storage: WebStorage;
 export {};
