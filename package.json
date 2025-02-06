@@ -1,6 +1,6 @@
 {
   "name": "@isq/storage",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "封装sessionStorage和localStorage操作",
   "types": "./dist/index.d.ts",
   "main": "./dist/main.bundle.js",
